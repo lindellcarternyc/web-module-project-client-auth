@@ -1,30 +1,21 @@
-import LoginForm from '../forms/LoginForm'
-
-import * as api from '../api'
-import { useState } from 'react'
 import { useHistory } from 'react-router'
 
+import * as api from '../api'
+import { useAsyncData } from '../hooks/use-async-data'
+
+import LoginForm from '../forms/LoginForm'
+
 const LoginPage = (props) => {
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState(null)
   const history = useHistory()
-
-  const onLogin = async (values) => {
-    setIsLoading(true)
-    setError(null)
-
+  const [{ isLoading, error }, onLogin] = useAsyncData(async (values) => {
     try {
-      const user = await api.login(values)
-      console.log(user)
-      setIsLoading(false)
+      await api.login(values)
       history.push('/friends-list')
-
     } catch (err) {
       const errorMessage = err.response.data.error
-      setIsLoading(false)
-      setError(errorMessage)
+      throw errorMessage
     }
-  }
+  })
 
   return (
     <div>

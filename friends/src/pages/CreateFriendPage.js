@@ -20,10 +20,18 @@ const CreateFriendPage = (props) => {
 
   const [{ isLoading, error }, handleCreateFriend] = useAsyncData(onCreateFriend)
 
+  const render = () => {
+    if (isLoading) {
+      return <p>Loading...</p>
+    } else if (error) {
+      return <p>{JSON.stringify(error)}</p>
+    }
+    return <CreateFriendForm onSubmit={handleCreateFriend}/>
+  }
   return (
     <div>
       <h2>Add a Friend</h2>
-      <CreateFriendForm onSubmit={handleCreateFriend}/>
+      {render()}
     </div>
   )
 }

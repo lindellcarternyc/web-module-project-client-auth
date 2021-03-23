@@ -4,7 +4,7 @@ const BASE_URL = 'http://localhost:6969/api'
 
 const axiosWithAuth = () => {
   const token = window.localStorage.getItem('friendsListToken')
-  console.log(token)
+  
   return axios.create({
     baseURL: BASE_URL,
     headers: {

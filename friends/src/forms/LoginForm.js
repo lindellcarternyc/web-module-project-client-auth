@@ -1,49 +1,32 @@
-import { useState } from 'react'
+import * as yup from 'yup'
+import { useForm } from '../hooks/use-form'
 
 const INITIAL_LOGIN_FORM_STATE = {
   username: '',
   password: ''
 }
 
-const useLoginForm = ({ onSubmit }) => {
-  const [ values, setValues ] = useState(INITIAL_LOGIN_FORM_STATE)
-
-  const handleChange = (evt) => {
-    const { name, value } = evt.target
-    setValues({
-      ...values,
-      [name]: value
-    })
-  }
-
-  const handleSubmit = (evt) => {
-    evt.preventDefault()
-    onSubmit(values)
-    setValues(INITIAL_LOGIN_FORM_STATE)
-  }
-
-  return [
-    { values },
-    { handleSubmit,
-      handleChange
-    }
-  ]
-}
-
 const LoginForm = (props) => {
   const { onSubmit } = props
-  const [{ values }, { handleChange, handleSubmit }] = useLoginForm({ onSubmit })
+  const [{ values, isValid }, { handleChange, handleSubmit }] = useForm({
+    initialValues: INITIAL_LOGIN_FORM_STATE,
+    onSubmit,
+    schema: yup.object().shape({
+      username: yup.string().required(),
+      password: yup.string().required()
+    })
+  })
 
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="username">Username: </label>
+        <label htmlFor="username">Name: </label>
         <input id="username" name="username" value={values.username} onChange={handleChange} />
         <br />
         <label htmlFor="password">Password: </label>
         <input id="password" name="password" value={values.password} type="password" onChange={handleChange} />
         <br />
-        <button type="submit" onClick={handleSubmit}>Log In</button>
+        <button disabled={!isValid} type="submit" onClick={handleSubmit}>Log In</button>
       </form>
     </div>
   )

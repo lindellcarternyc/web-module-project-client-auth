@@ -41,7 +41,8 @@ export const useForm = ({ initialValues, onSubmit, schema }) => {
       [name]: value
     }
 
-    yup.reach(schema, name, updatedValues)
+    if (schema) {
+      yup.reach(schema, name, updatedValues)
       .validate(value)
       .then(_ => {
         setErrors({
@@ -55,6 +56,7 @@ export const useForm = ({ initialValues, onSubmit, schema }) => {
           [name]: err.message
         })
       })
+    }
     return setValues(updatedValues)
   }
 

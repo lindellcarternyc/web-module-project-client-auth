@@ -42,3 +42,12 @@ export const getFriend = async (id) => {
     throw err
   }
 }
+
+export const createFriend = async ({ name, email, age}) => {
+  try {
+    const response = await axiosWithAuth().post(`/friends`, { name, email, age })
+    return response.data
+  } catch ( err ) {
+    throw err
+  }
+}

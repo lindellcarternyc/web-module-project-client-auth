@@ -1,9 +1,14 @@
 import * as api from '../api'
 import { useFetchOnMount } from '../hooks/use-fetch-on-mount'
-import { Link } from 'react-router-dom'
+
+import FriendsList from '../components/FriendsList'
 
 const FriendsListPage = (props) => {
   const [{ data: friends, isLoading, error }] = useFetchOnMount([], api.getFriends)
+
+  const deleteFriend = (id) => {
+    console.log('FriendsListPage:deleteFriend:id', id)
+  }
 
   if (isLoading) {
     return <p>Loading...</p>
@@ -19,11 +24,9 @@ const FriendsListPage = (props) => {
     } else if (error) {
       return <p>{JSON.stringify(error)}</p>
     } else if (friends !== null) {
-      return friends.map(f => {
-        return <p key={f.id}>
-          <Link to={`/friends-list/${f.id}`}>{f.name}</Link>
-        </p>
-      })
+      return (
+        <FriendsList friends={friends} onDelete={deleteFriend} />
+      )
     }
   }
   return (

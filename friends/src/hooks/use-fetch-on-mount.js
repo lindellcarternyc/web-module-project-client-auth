@@ -5,9 +5,8 @@ export const useFetchOnMount = (defaultValue, requestFn, ...params) => {
   const [data, setData] = useState(defaultValue)
   const [error, setError] = useState(null)
 
-  useEffect(() => {
+  const handleRequest = () => {
     setIsLoading(true)
-
     requestFn(...params)
       .then(data => {
         setIsLoading(false)
@@ -17,10 +16,20 @@ export const useFetchOnMount = (defaultValue, requestFn, ...params) => {
         setIsLoading(false)
         setError(null)
       })
+  }
+
+  useEffect(() => {
+    handleRequest()
+    
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const refetch = () => {
+    handleRequest()
+  }
+
   return [
-    { isLoading, error, data }
+    { isLoading, error, data },
+    { refetch }
   ]
 }

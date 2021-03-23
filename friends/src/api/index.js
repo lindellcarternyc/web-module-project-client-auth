@@ -51,3 +51,12 @@ export const createFriend = async ({ name, email, age}) => {
     throw err
   }
 }
+
+export const deleteFriend = async (id) => {
+  try {
+    const response = await axiosWithAuth().delete(`/friends/${id}`)
+    console.log(response)
+  } catch (err) {
+    throw err
+  }
+}

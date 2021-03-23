@@ -1,14 +1,30 @@
+import { useState } from 'react'
 import * as api from '../api'
 import { useFetchOnMount } from '../hooks/use-fetch-on-mount'
 
 import FriendsList from '../components/FriendsList'
+import DeleteModal from '../components/DeleteModal'
 
 const FriendsListPage = (props) => {
-  const [{ data: friends, isLoading, error }] = useFetchOnMount([], api.getFriends)
+  const [{ data: friends, isLoading, error }, { refetch }] = useFetchOnMount([], api.getFriends)
+  const [toDelete, setToDelete] = useState(null)
 
-  const deleteFriend = (id) => {
-    console.log('FriendsListPage:deleteFriend:id', id)
+  const onClickDelete = (id) => {
+    setToDelete(id)
   }
+
+  const confirmDelete = (id) => {
+    api.deleteFriend(id)
+      .then(_ => {
+        setToDelete(null)
+        refetch()
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+
+  const cancelDelete = () => setToDelete(null)
 
   if (isLoading) {
     return <p>Loading...</p>
@@ -25,12 +41,24 @@ const FriendsListPage = (props) => {
       return <p>{JSON.stringify(error)}</p>
     } else if (friends !== null) {
       return (
-        <FriendsList friends={friends} onDelete={deleteFriend} />
+        <FriendsList friends={friends} onDelete={onClickDelete} />
       )
     }
   }
   return (
     <div>
+      <DeleteModal 
+        isOpen={toDelete !== null} 
+        title="Delete this friend?"
+        confirm={{
+          handler: () => {
+            confirmDelete(toDelete)
+          }
+        }}
+        cancel={{
+          handler: cancelDelete
+        }}
+      />
       <h2>Friends List</h2>
       <div>
         {render()}

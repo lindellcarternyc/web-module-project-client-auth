@@ -6,6 +6,7 @@ const axiosWithAuth = () => {
   const token = window.localStorage.getItem('friendsListToken')
   console.log(token)
   return axios.create({
+    baseURL: BASE_URL,
     headers: {
       'authorization': token
     }
@@ -16,7 +17,7 @@ export const login = async ({ username, password }) => {
   try {
     const res = await axios.post(`${BASE_URL}/login`, { username, password })
     const token = res.data.payload
-    console.log('token', token)
+    
     window.localStorage.setItem('friendsListToken', token)
   } catch (err) {
     throw err
@@ -25,8 +26,17 @@ export const login = async ({ username, password }) => {
 
 export const getFriends = async () => {
   try {
-    const response = await axiosWithAuth().get(`${BASE_URL}/friends`)
-    console.log(response.data)
+    const response = await axiosWithAuth().get(`/friends`)
+    
+    return response.data
+  } catch (err) {
+    throw err
+  }
+}
+
+export const getFriend = async (id) => {
+  try {
+    const response = await axiosWithAuth().get(`/friends/${id}`)
     return response.data
   } catch (err) {
     throw err

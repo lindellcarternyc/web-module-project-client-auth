@@ -1,25 +1,9 @@
-import { useEffect, useState } from 'react'
-
 import * as api from '../api'
+import { useFetchOnMount } from '../hooks/use-fetch-on-mount'
+import { Link } from 'react-router-dom'
 
 const FriendsListPage = (props) => {
-  const [friends, setFriends] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState(null)
-
-  console.log(friends)
-  useEffect(() => {
-    setIsLoading(true)
-    api.getFriends()
-      .then(data => {
-        setFriends(data)
-        setIsLoading(false)
-      })
-      .catch(err => {
-        setIsLoading(false)
-        setError(err)
-      })  
-  }, [])
+  const [{ data: friends, isLoading, error }] = useFetchOnMount([], api.getFriends)
 
   if (isLoading) {
     return <p>Loading...</p>
@@ -29,13 +13,24 @@ const FriendsListPage = (props) => {
     return <p>{JSON.stringify(error)}</p>
   }
 
+  const render = () => {
+    if (isLoading) {
+      return <p>Loading...</p>
+    } else if (error) {
+      return <p>{JSON.stringify(error)}</p>
+    } else if (friends !== null) {
+      return friends.map(f => {
+        return <p key={f.id}>
+          <Link to={`/friends-list/${f.id}`}>{f.name}</Link>
+        </p>
+      })
+    }
+  }
   return (
     <div>
       <h2>Friends List</h2>
       <div>
-        {friends.map(f => {
-          return <p key={f.id}>{f.name}</p>
-        })}
+        {render()}
       </div>
     </div>
   )

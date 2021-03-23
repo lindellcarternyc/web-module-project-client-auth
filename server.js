@@ -1,8 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const port = 5000;
+
 const app = express();
+
+const [ ENV_PORT ] = process.argv.slice(2)
+const port = ENV_PORT || 5000
+
 const token =
   'esfeyJ1c2VySWQiOiJiMDhmODZhZi0zNWRhLTQ4ZjItOGZhYi1jZWYzOTA0NUIhkufemQifQ';
 

@@ -4,10 +4,12 @@ import { useFetchOnMount } from '../hooks/use-fetch-on-mount'
 
 import FriendsList from '../components/FriendsList'
 import DeleteModal from '../components/DeleteModal'
+import { useHistory } from 'react-router'
 
 const FriendsListPage = (props) => {
   const [{ data: friends, isLoading, error }, { refetch }] = useFetchOnMount([], api.getFriends)
   const [toDelete, setToDelete] = useState(null)
+  const history = useHistory()
 
   const onClickDelete = (id) => {
     setToDelete(id)
@@ -22,6 +24,10 @@ const FriendsListPage = (props) => {
       .catch(err => {
         console.log(err)
       })
+  }
+
+  const onUpdate = (id) => {
+    history.push(`/update-friend/${id}`)
   }
 
   const cancelDelete = () => setToDelete(null)
@@ -41,7 +47,7 @@ const FriendsListPage = (props) => {
       return <p>{JSON.stringify(error)}</p>
     } else if (friends !== null) {
       return (
-        <FriendsList friends={friends} onDelete={onClickDelete} />
+        <FriendsList friends={friends} onDelete={onClickDelete} onUpdate={onUpdate}/>
       )
     }
   }

@@ -7,6 +7,7 @@ import HomePage from './pages/HomePage'
 import FriendsListPage from './pages/FriendsListPage';
 import FriendPage from './pages/FriendPage';
 import CreateFriendPage from './pages/CreateFriendPage';
+import UpdateFriendPage from './pages/UpdateFriendPage';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <PrivateRoute path="/friends-list/:friendId" component={FriendPage} />
         <PrivateRoute path="/friends-list" component={FriendsListPage} />
         <PrivateRoute path="/create-friend" component={CreateFriendPage} />
+        <PrivateRoute path="/update-friend/:friendId" component={UpdateFriendPage} />
         <Route path="/" component={HomePage} />
       </Switch>
     </div>

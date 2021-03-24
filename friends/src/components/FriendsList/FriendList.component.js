@@ -1,11 +1,14 @@
 import { Link } from 'react-router-dom'
 
 const FriendListComponent = (props) => {
-  const { friends, onDelete } = props
+  const { friends, onDelete, onUpdate } = props
 
   const onClickDelete = (id) => (evt) => {
-    console.log('onClickDelete:id', id)
     onDelete(id)
+  }
+
+  const onClickUpdate = (id) => _ => {
+    onUpdate(id)
   }
   
   return (
@@ -14,6 +17,7 @@ const FriendListComponent = (props) => {
         return (
           <div key={fr.id}>
             <Link to={`/friends-list/${fr.id}`}>{fr.name}</Link>
+            <button onClick={onClickUpdate(fr.id)}>Update Friend</button>
             <button onClick={onClickDelete(fr.id)}>Delete Friend</button>
           </div>
         )

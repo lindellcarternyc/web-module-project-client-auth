@@ -60,3 +60,12 @@ export const deleteFriend = async (id) => {
     throw err
   }
 }
+
+export const updateFriend = async (data) => {
+  try {
+    const response = await axiosWithAuth().put(`/friends/${data.id}`, data)
+    console.log(response)
+  } catch (err) {
+    throw err
+  }
+}

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const BASE_URL = 'http://localhost:6969/api'
+const BASE_URL = 'http://localhost:5000/api'
 
 const axiosWithAuth = () => {
   const token = window.localStorage.getItem('friendsListToken')

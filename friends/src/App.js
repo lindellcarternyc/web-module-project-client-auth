@@ -1,4 +1,4 @@
-import { Switch, Route, Link } from 'react-router-dom'
+import { Switch, Route, Link, useHistory } from 'react-router-dom'
 
 import PrivateRoute from './components/PrivateRoute'
 
@@ -10,11 +10,19 @@ import CreateFriendPage from './pages/CreateFriendPage';
 import UpdateFriendPage from './pages/UpdateFriendPage';
 
 function App() {
+  const history = useHistory()
+
+  const onLogout = () => {
+    window.localStorage.removeItem('friendsListToken')
+    history.push('/login')
+  }
+
   return (
     <div>
       <nav>
         <Link to="/friends-list">Friends</Link>
         <Link to="/create-friend">Add Friend</Link>
+        <button onClick={onLogout}>Log Out</button>
       </nav>
       <Switch>
         <Route exact path="/login" component={LoginPage} />
